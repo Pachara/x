@@ -1,30 +1,46 @@
 <script setup>
 useSeoMeta({
-  title: 'บล็อก — ความรู้เรื่องน้ำตาลทราย',
-  description: 'บทความความรู้เกี่ยวกับน้ำตาลทราย ราคาตลาด เทรนด์อุตสาหกรรม และข่าวสารจาก บุ่นเส่ง ไทยชูการ์',
+  title: 'บล็อก — ข่าวสารน้ำตาลทราย',
+  description: 'ข่าวสารอุตสาหกรรมน้ำตาลทราย ราคาตลาด นโยบายรัฐ ความรู้เรื่องน้ำตาล จาก บุ่นเส่ง ไทยชูการ์',
   ogTitle: 'บล็อก | บุ่นเส่ง ไทยชูการ์',
   ogUrl: 'https://x.pages.dev/blog',
 })
 </script>
 
 <template>
-  <div class="max-w-[1280px] mx-auto px-4 py-8">
+  <div class="max-w-[1280px] mx-auto px-6 py-8">
     <LayoutBreadcrumb />
-    <h1 class="text-3xl font-bold text-dark mb-8">บล็อก</h1>
+    <div class="text-center mb-12">
+      <h1 class="text-3xl font-bold text-dark mb-3">บล็อก</h1>
+      <p class="text-dark/50">ข่าวสารอุตสาหกรรมน้ำตาลทราย ราคาตลาด และความรู้ที่เป็นประโยชน์</p>
+    </div>
 
     <ContentList path="/blog" v-slot="{ list }">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <article v-for="article in list" :key="article.stem" class="bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
+        <article
+          v-for="article in list"
+          :key="article.stem"
+          class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300"
+        >
           <NuxtLink :to="article.path">
+            <div v-if="article.featureImage?.url || article.image" class="aspect-video bg-gray-50 overflow-hidden">
+              <NuxtImg
+                :src="article.featureImage?.url || article.image"
+                :alt="article.title"
+                class="w-full h-full object-cover"
+                loading="lazy"
+                format="webp"
+              />
+            </div>
             <div class="p-6">
-              <time class="text-sm text-dark/40">{{ article.date }}</time>
-              <h2 class="text-lg font-bold text-dark mt-2 mb-3">{{ article.title }}</h2>
-              <p class="text-dark/60 text-sm leading-relaxed">{{ article.description }}</p>
-              <div class="flex gap-2 mt-4">
-                <span v-for="tag in (article.tags || [])" :key="tag" class="text-xs bg-light text-dark/50 px-2 py-1 rounded-full">
-                  {{ tag }}
-                </span>
-              </div>
+              <time v-if="article.publishDate || article.date" class="text-xs text-dark/40">
+                {{ article.publishDate || article.date }}
+              </time>
+              <h2 class="text-base font-semibold text-dark mt-2 mb-2 line-clamp-2">{{ article.title }}</h2>
+              <p v-if="article.description" class="text-dark/50 text-sm leading-relaxed line-clamp-3">
+                {{ article.description }}
+              </p>
+              <p v-if="article.reference" class="text-xs text-dark/30 mt-3">ที่มา: {{ article.reference }}</p>
             </div>
           </NuxtLink>
         </article>

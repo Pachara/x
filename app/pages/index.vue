@@ -19,7 +19,10 @@ useLocalBusinessSchema()
     <HomeHero />
     <HomeTrustSignals />
     <HomeProductShowcase />
+    <HomeSugarTypes />
     <HomePriceBoard />
+    <HomeBrandShowcase />
+    <HomeSackGallery />
     <HomeCTASection />
   </div>
 </template>

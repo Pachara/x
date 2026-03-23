@@ -9,31 +9,39 @@ const { data: article } = await useAsyncData(`blog-${slug}`, () =>
 if (article.value) {
   useSeoMeta({
     title: article.value.title,
-    description: article.value.description,
+    description: article.value.description || article.value.title,
     ogTitle: `${article.value.title} | บุ่นเส่ง ไทยชูการ์`,
-    ogDescription: article.value.description,
+    ogDescription: article.value.description || '',
+    ogImage: article.value.featureImage?.url ? `https://x.pages.dev${article.value.featureImage.url}` : undefined,
     ogUrl: `https://x.pages.dev/blog/${slug}`,
   })
 
   useArticleSchema({
     headline: article.value.title,
     description: article.value.description || '',
-    image: article.value.image || 'https://x.pages.dev/images/logo.png',
-    datePublished: article.value.date || '',
+    image: article.value.featureImage?.url ? `https://x.pages.dev${article.value.featureImage.url}` : 'https://x.pages.dev/images/logo.png',
+    datePublished: article.value.publishDate || article.value.date || '',
   })
 }
 </script>
 
 <template>
-  <div class="max-w-[1280px] mx-auto px-4 py-8">
+  <div class="max-w-[1280px] mx-auto px-6 py-8">
     <LayoutBreadcrumb />
 
     <article v-if="article" class="max-w-3xl mx-auto">
       <header class="mb-8">
-        <time class="text-sm text-dark/40">{{ article.date }}</time>
+        <time v-if="article.publishDate || article.date" class="text-sm text-dark/40">
+          {{ article.publishDate || article.date }}
+        </time>
         <h1 class="text-3xl font-bold text-dark mt-2">{{ article.title }}</h1>
-        <p v-if="article.description" class="text-lg text-dark/60 mt-3">{{ article.description }}</p>
+        <p v-if="article.description" class="text-lg text-dark/60 mt-3 leading-relaxed">{{ article.description }}</p>
+        <p v-if="article.reference" class="text-sm text-dark/30 mt-2">ที่มา: {{ article.reference }}</p>
       </header>
+
+      <div v-if="article.featureImage?.url" class="mb-8">
+        <NuxtImg :src="article.featureImage.url" :alt="article.title" class="w-full rounded-2xl" format="webp" />
+      </div>
 
       <div class="prose prose-lg max-w-none">
         <ContentRenderer :value="article" />
