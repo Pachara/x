@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-primary: #CD7328;
+  --color-primary-dark: #b5621f;
+  --color-secondary: #3bcd28;
+  --color-accent: #F5A623;
+  --color-dark: #333333;
+  --color-light: #F8F5F0;
+
+  --font-sans: "Mitr", sans-serif;
+}
