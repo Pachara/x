@@ -4,14 +4,15 @@ interface PriceItem {
   name: string
   price: number
   unit: string
+  type: 'white' | 'brown'
   updatedAt?: string
 }
 
 const prices = ref<PriceItem[]>([
-  { id: 1, name: 'น้ำตาลทรายขาว (กระสอบ 50 กก.)', price: 850, unit: 'กระสอบ' },
-  { id: 2, name: 'น้ำตาลทรายแดง (กระสอบ 50 กก.)', price: 880, unit: 'กระสอบ' },
-  { id: 3, name: 'น้ำตาลทรายขาว (ถุง 1 กก.)', price: 22, unit: 'ถุง' },
-  { id: 4, name: 'น้ำตาลทรายแดง (ถุง 1 กก.)', price: 25, unit: 'ถุง' },
+  { id: 1, name: 'น้ำตาลทรายขาว', price: 850, unit: 'กระสอบ 50 กก.', type: 'white' },
+  { id: 2, name: 'น้ำตาลทรายแดง', price: 880, unit: 'กระสอบ 50 กก.', type: 'brown' },
+  { id: 3, name: 'น้ำตาลทรายขาว', price: 22, unit: 'ถุง 1 กก.', type: 'white' },
+  { id: 4, name: 'น้ำตาลทรายแดง', price: 25, unit: 'ถุง 1 กก.', type: 'brown' },
 ])
 
 const connected = ref(false)
@@ -26,44 +27,46 @@ onMounted(() => {
         connected.value = true
       }
     }
-    es.onerror = () => {
-      connected.value = false
-    }
-  } catch {
-    // SSE not available, use static prices
-  }
+    es.onerror = () => { connected.value = false }
+  } catch {}
 })
 </script>
 
 <template>
-  <section class="py-16 px-4 bg-light" aria-label="ราคาน้ำตาลวันนี้">
+  <section class="py-20 px-6 bg-gray-50" aria-label="ราคาน้ำตาลวันนี้">
     <div class="max-w-[1280px] mx-auto">
-      <h2 class="text-3xl font-bold text-dark text-center mb-2">ราคาน้ำตาลวันนี้</h2>
-      <p v-if="connected" class="text-center text-sm text-secondary mb-8">
-        <span class="inline-block w-2 h-2 bg-secondary rounded-full mr-1 animate-pulse" />
-        อัปเดตแบบเรียลไทม์
-      </p>
-      <p v-else class="text-center text-sm text-dark/40 mb-8">ราคาอ้างอิง</p>
-
-      <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm overflow-hidden">
-        <table class="w-full">
-          <thead>
-            <tr class="bg-primary text-white">
-              <th class="text-left px-6 py-3 font-semibold">สินค้า</th>
-              <th class="text-center px-4 py-3 font-semibold">หน่วย</th>
-              <th class="text-right px-6 py-3 font-semibold">ราคา (บาท)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, i) in prices" :key="item.id" :class="i % 2 === 0 ? 'bg-white' : 'bg-light'">
-              <td class="px-6 py-4 text-dark">{{ item.name }}</td>
-              <td class="px-4 py-4 text-center text-dark/70">{{ item.unit }}</td>
-              <td class="px-6 py-4 text-right font-bold text-primary text-lg">{{ item.price.toLocaleString() }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-dark mb-3">ราคาน้ำตาลวันนี้</h2>
+        <p class="text-dark/50">
+          <span v-if="connected" class="inline-flex items-center gap-1.5">
+            <span class="w-2 h-2 bg-secondary rounded-full animate-pulse" />
+            อัปเดตแบบเรียลไทม์
+          </span>
+          <span v-else>ราคาอ้างอิง — โทรสอบถามราคาล่าสุด</span>
+        </p>
       </div>
-      <p class="text-center text-sm text-dark/50 mt-4">* ราคาเปลี่ยนแปลงตามตลาด กรุณาโทรสอบถามราคาล่าสุด 081-669-3077</p>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <div
+          v-for="item in prices"
+          :key="item.id"
+          class="bg-white rounded-2xl p-6 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300"
+          :class="item.type === 'white' ? 'border-b-2 border-primary' : 'border-b-2 border-accent'"
+        >
+          <div class="flex items-center gap-2 mb-4">
+            <span
+              class="w-3 h-3 rounded-full"
+              :class="item.type === 'white' ? 'bg-amber-100 border border-amber-300' : 'bg-amber-700'"
+            />
+            <span class="text-sm text-dark/50">{{ item.type === 'white' ? 'ทรายขาว' : 'ทรายแดง' }}</span>
+          </div>
+          <p class="text-dark font-medium mb-1">{{ item.name }}</p>
+          <p class="text-3xl font-bold text-primary mb-1">฿{{ item.price.toLocaleString() }}</p>
+          <p class="text-sm text-dark/40">{{ item.unit }}</p>
+        </div>
+      </div>
+
+      <p class="text-center text-sm text-dark/40 mt-8">* ราคาเปลี่ยนแปลงตามตลาด กรุณาโทรสอบถามราคาล่าสุด 081-669-3077</p>
     </div>
   </section>
 </template>

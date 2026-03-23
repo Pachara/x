@@ -4,10 +4,15 @@
 @theme {
   --color-primary: #CD7328;
   --color-primary-dark: #b5621f;
+  --color-primary-light: #F0DCC8;
   --color-secondary: #3bcd28;
   --color-accent: #F5A623;
   --color-dark: #333333;
   --color-light: #F8F5F0;
+  --color-gray-50: #FAFAF8;
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.06);
 
   --font-sans: "Mitr", sans-serif;
 }

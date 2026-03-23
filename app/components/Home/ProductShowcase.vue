@@ -25,9 +25,12 @@ const products = [
 </script>
 
 <template>
-  <section class="py-16 px-4" aria-label="สินค้าของเรา">
+  <section class="py-20 px-6" aria-label="สินค้าของเรา">
     <div class="max-w-[1280px] mx-auto">
-      <h2 class="text-3xl font-bold text-dark text-center mb-10">สินค้าของเรา</h2>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-dark mb-3">สินค้าของเรา</h2>
+        <p class="text-dark/50">น้ำตาลทรายคุณภาพ หลายยี่ห้อ ราคาส่งตรงจากผู้จัดจำหน่าย</p>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <ProductCard v-for="product in products" :key="product.slug" :product="product" />
       </div>
